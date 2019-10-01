@@ -1,0 +1,164 @@
+\documentclass[letterpaper,12pt]{article}
+
+\usepackage{threeparttable}
+\usepackage{geometry}
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1.25in,rmargin=1.25in}
+\usepackage[format=hang,font=normalsize,labelfont=bf]{caption}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{delarray}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lscape}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{float,color}
+\usepackage[pdftex]{graphicx}
+\usepackage{pdfsync}
+\usepackage{verbatim}
+\usepackage{placeins}
+\usepackage{geometry}
+\usepackage{pdflscape}
+\synctex=1
+\usepackage{hyperref}
+\hypersetup{colorlinks,linkcolor=red,urlcolor=blue,citecolor=red}
+\usepackage{bm}
+
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}{Definition} % Number definitions on their own
+\newtheorem{derivation}{Derivation} % Number derivations on their own
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}{Proposition} % Number propositions on their own
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\bibliographystyle{aer}
+\newcommand\ve{\varepsilon}
+\renewcommand\theenumi{\roman{enumi}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\begin{titlepage}
+\title{
+  Determinants of Downward Risk in Labor Income \thanks{This research benefited from support from the \href{https://www.oselab.org}{Open Source Economics Laboratory (OSE Lab)} at the University of Chicago. All Python code and documentation for the computational model is available at \href{https://github.com/OpenSourceEcon/IncomeTrans}{https://github.com/OpenSourceEcon/IncomeTrans} [currently a private repository].}
+}
+\author{
+  Richard W. Evans\footnote{University of Chicago, M.A. Program in Computational Social Science, McGiffert House, Room 208, Chicago, IL 60637, (773) 702-9169, \href{mailto:rwevans@uchicago.edu}{rwevans@uchicago.edu}.}
+  \and
+  Fulin Guo\footnote{University of Chicago, M.A. Program in Computational Social Science, \href{mailto:fulinguo@uchicago.edu}{fulinguo@uchicago.edu}.}}
+\date{September 2019 \\
+  \scriptsize{(version 19.09.a)}}
+\maketitle
+\vspace{-9mm}
+\begin{abstract}
+\small{This paper uses the PSID to estimate empirical Markov transition matrices for each year of the survey for the probability of transitioning from one quartile of the labor income distribution to any of the other quartiles of the labor distribution. We merge in crime rate, high school dropout rate, and inequality level data associated with the geography of each PSID respondent because these variables have shown to be significant predictors of intergenerational mobility. We show that age, gender, and these location-specific factors also predict high frequency transition probabilities in labor income. We are currently applying for access to the zip code level data from the PSID, and we will also apply for access to the IRS panel of earnings transitions.
+\vspace{3mm}
+
+%\noindent\textit{keywords:}\: Static scoring, revenue estimates, dynamic scoring.
+%
+%\vspace{3mm}
+%
+\noindent\textit{JEL classification:} put codes here
+}
+
+\end{abstract}
+\thispagestyle{empty}
+\end{titlepage}
+
+
+\begin{spacing}{1.5}
+
+\section{Introduction}\label{SecIntro}
+
+  \textbf{Outline of paper}
+  \begin{itemize}
+    \item Question: What are the key determinants of downward income mobility?
+    \begin{itemize}
+      \item Contributions
+      \begin{itemize}
+        \item We add geographic variables as in Chetty, et al (?)
+        \item Focusing on downward mobility addresses asymmetry in Markov transition matrices. Stochastic income regression models imply symmetric effects of upward and downward shocks.
+      \end{itemize}
+      \item Link to stochastic income literature and to intergenerational mobility literature
+    \end{itemize}
+    \item Data: PSID, NLSY79, Census
+    \begin{itemize}
+      \item Get zip code data from PSID and NLSY79 via IRB request
+    \end{itemize}
+    \item Markov Matrices
+    \item Logistic regression with cross validation
+    \item Conclusion
+    \begin{itemize}
+      \item Policy implications
+      \item Further questions
+      \item Use in stochastic models
+    \end{itemize}
+  \end{itemize}
+
+  Recent work has focused on estimating the stochastic income processes faced by different households. The accuracy of these processes are an essential input to modeling household behavior. The expected riskiness of labor income varies by earner personal and location characteristics. Precautionary savings and labor supply behavior is influenced by the perceived riskiness of future income streams. This paper describes how downward income risk changes based on individual characteristics (age and gender) as well as some location specific characteristics shown to be important in the literature (crime rate, dropout rate, and inequality).
+
+  \citet{GuvenenEtAl:2014} study how labor earnings transition probabilities change over the business cycle. Their main findings are that the skewness of the shock process shifts from expansion to recession. They also find that the earnings process for top earners is significantly different from that of the rest of the distribution and that the downside earnings risk for top earners increases disproportionately during a recession.
+
+  \citet{DeBackerRamnath:2019} estimate these transition probabilities for narrow quantiles of the U.S. population using administrative panel data from the Internal Revenue Service.
+
+
+\section{Data: PSID, NLSY79, and U.S. Census}\label{SecData}
+
+  Put data description here with comparison of differences in samples in PSID and NLSY79.
+
+
+\section{Conditional Markov Transition Matrices}\label{SecMarkov}
+
+  Put Markov transition matrices analyses here.
+
+
+\section{Logistic Regression with Cross Validation}\label{SecLogit}
+
+  Put logistic regression results here.
+
+
+\section{Conclusion}\label{SecConclusion}
+
+  Put conclusion here.
+
+
+\end{spacing}
+
+
+\newpage
+\bibliography{IncomeTrans}
+
+
+% \newpage
+% \renewcommand{\theequation}{A.\arabic{section}.\arabic{equation}}
+%                                                  % redefine the command that creates the section number
+% \renewcommand{\thesection}{A-\arabic{section}}   % redefine the command that creates the equation number
+% \setcounter{equation}{0}                         % reset counter
+% \setcounter{section}{0}                          % reset section number
+% \section*{APPENDIX}                              % use *-form to suppress numbering
+
+% \begin{spacing}{1.0}
+
+% \section{Full Detail of Dynamic General Equilibrium Model}\label{AppDGE}
+
+
+
+\end{document}
